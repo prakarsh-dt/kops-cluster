@@ -18,11 +18,12 @@ export KOPS_STATE_STORE="s3://statestore-bucket-name"
 
 3. Create the cluster with the configs from the downloaded file (Please change the cluster name/other configs if you have to before issuing the **kops create** command)
 To change the cluster name please replace cluster name mentioned in the nodegroup labels as well.
-```kops create secret --name test.devtron.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub
+```shell
+kops create secret --name test.devtron.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub
 kops create -f kops-spots-use1-cluster-config.yaml --yes
 ```
 
 4. To delete the cluster please use the following command (make sure the KOPS_STATE_STORE environment variable is set)
-```
+```shell
 kops delete cluster test.devtron.k8s.local --yes
 ```
