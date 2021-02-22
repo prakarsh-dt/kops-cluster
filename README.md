@@ -1,8 +1,13 @@
 # Commands to create a Test KOPS Cluster
 
+## Prerequisites
+1. Ensure that the machine you are running the kops commands on has proper AWS access to be able to create the cluster.
+2. Ensure that the machine you are running has kops installed
+
+
 1. Download the kops configuration file
 ```shell
-wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/789a2cc1b0bbac83c468d1edf23584e86a0e1b0f/test/kops-spots-use1-cluster-config.yaml
+wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/test/kops-spots-use1-cluster-config.yaml
 ```
 
 2. Set the KOPS_STATE_STORE environment variable with the statestore bucket
