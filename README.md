@@ -4,6 +4,7 @@
 1. Ensure that the machine you are running the kops commands on has proper AWS access to be able to create the cluster.
 2. Ensure that the machine you are running has kops installed
 
+### STEPS
 
 1. Download the kops configuration file
 ```shell
