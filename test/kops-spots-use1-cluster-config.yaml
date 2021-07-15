@@ -61,7 +61,7 @@ metadata:
   name: master-us-east-1a
 spec:
   image: kope.io/k8s-1.17-debian-stretch-amd64-hvm-ebs-2020-11-19
-  machineType: t3.small
+  machineType: t3.medium
   maxPrice: "0.30"
   maxSize: 1
   minSize: 1
@@ -83,7 +83,7 @@ metadata:
   name: nodes
 spec:
   image: kope.io/k8s-1.17-debian-stretch-amd64-hvm-ebs-2020-11-19
-  machineType: t3.xlarge
+  machineType: c5n.large
   maxPrice: "0.40"
   maxSize: 2
   minSize: 1
