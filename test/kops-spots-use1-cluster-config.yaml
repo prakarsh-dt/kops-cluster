@@ -16,12 +16,16 @@ spec:
     etcdMembers:
     - instanceGroup: master-us-east-1a
       name: a
+      volumeSize: 10
+      volumeType: gp2
     memoryRequest: 100Mi
     name: main
   - cpuRequest: 100m
     etcdMembers:
     - instanceGroup: master-us-east-1a
       name: a
+      volumeSize: 10
+      volumeType: gp2
     memoryRequest: 100Mi
     name: events
   iam:
@@ -31,7 +35,7 @@ spec:
     anonymousAuth: false
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: 1.17.17
+  kubernetesVersion: 1.21.6
   networkCIDR: 172.20.0.0/16
   networking:
     kubenet: {}
@@ -60,7 +64,6 @@ metadata:
     kops.k8s.io/cluster: test.devtron.k8s.local
   name: master-us-east-1a
 spec:
-  image: kope.io/k8s-1.17-debian-stretch-amd64-hvm-ebs-2020-11-19
   machineType: t3.medium
   maxPrice: "0.30"
   maxSize: 1
@@ -68,6 +71,8 @@ spec:
   nodeLabels:
     kops.k8s.io/instancegroup: master-us-east-1a
   role: Master
+  rootVolumeSize: 20
+  rootVolumeType: gp2
   subnets:
   - us-east-1a
 
@@ -82,7 +87,6 @@ metadata:
     kops.k8s.io/cluster: test.devtron.k8s.local
   name: nodes
 spec:
-  image: kope.io/k8s-1.17-debian-stretch-amd64-hvm-ebs-2020-11-19
   machineType: c5n.xlarge
   maxPrice: "0.40"
   maxSize: 2
@@ -90,5 +94,7 @@ spec:
   nodeLabels:
     kops.k8s.io/instancegroup: nodes
   role: Node
+  rootVolumeSize: 20
+  rootVolumeType: gp2
   subnets:
   - us-east-1a
