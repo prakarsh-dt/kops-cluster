@@ -27,6 +27,10 @@ kops update cluster test.devtron.k8s.local --yes
 ```shell
 kops create secret --name test.devtron.k8s.local sshpublickey admin -i ~/.ssh/id_rsa.pub
 kops update cluster test.devtron.k8s.local --yes
+```
+
+5. Update kubeconfig file to communicate with cluster
+```shell
 kops export kubeconfig --admin
 ```
 
