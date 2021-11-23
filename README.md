@@ -34,7 +34,7 @@ kops update cluster test.devtron.k8s.local --yes
 kops export kubeconfig --admin
 ```
 
-5. To delete the cluster please use the following command (make sure the KOPS_STATE_STORE environment variable is set)
+6. To delete the cluster please use the following command (make sure the KOPS_STATE_STORE environment variable is set)
 ```shell
 kops delete cluster test.devtron.k8s.local --yes
 ```
