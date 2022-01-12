@@ -95,7 +95,7 @@ spec:
   role: Node
   rootVolumeSize: 20
   rootVolumeType: gp2
-  additionalSecurityGroups:
-  - sg-0158ff499ddfb7d53
+#   additionalSecurityGroups:
+#   - sg-0158ff499ddfb7d53
   subnets:
   - us-east-1a
