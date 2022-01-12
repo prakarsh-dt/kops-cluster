@@ -31,7 +31,7 @@ kops update cluster test.devtron.k8s.local --yes
 
 5. Update kubeconfig file to communicate with cluster
 ```shell
-kops export kubeconfig --admin
+kops export kubeconfig --admin=18000h --name test.devtron.k8s.local
 ```
 
 6. To delete the cluster please use the following command (make sure the KOPS_STATE_STORE environment variable is set)
