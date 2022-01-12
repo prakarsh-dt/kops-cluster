@@ -1,0 +1,101 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: "2021-02-08T06:30:07Z"
+  name: test.devtron.info
+spec:
+  api:
+    dns:
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - instanceGroup: master-us-east-1a
+      name: a
+      volumeSize: 10
+      volumeType: gp2
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - instanceGroup: master-us-east-1a
+      name: a
+      volumeSize: 10
+      volumeType: gp2
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.21.6
+  networkCIDR: 172.20.0.0/16
+  networking:
+    kubenet: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: us-east-1a
+    type: Public
+    zone: us-east-1a
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2021-02-08T06:30:07Z"
+  generation: 2
+  labels:
+    kops.k8s.io/cluster: test.devtron.k8s.local
+  name: master-us-east-1a
+spec:
+  machineType: t3.medium
+  maxPrice: "0.30"
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-1a
+  role: Master
+  rootVolumeSize: 20
+  rootVolumeType: gp2
+  subnets:
+  - us-east-1a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2021-02-08T06:30:07Z"
+  generation: 2
+  labels:
+    kops.k8s.io/cluster: test.devtron.k8s.local
+  name: nodes
+spec:
+  machineType: c5n.xlarge
+  maxPrice: "0.40"
+  maxSize: 2
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: nodes
+  role: Node
+  rootVolumeSize: 20
+  rootVolumeType: gp2
+  additionalSecurityGroups:
+  - sg-0158ff499ddfb7d53
+  subnets:
+  - us-east-1a
