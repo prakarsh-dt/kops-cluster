@@ -1,0 +1,53 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: "2021-02-08T06:30:07Z"
+  name: $CLUSTER_NAME
+spec:
+  api:
+    dns:
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - instanceGroup: $MASTER_REGION
+      name: a
+      volumeSize: 10
+      volumeType: gp2
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - instanceGroup: $MASTER_REGION
+      name: a
+      volumeSize: 10
+      volumeType: gp2
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  kubernetesVersion: 1.21.6
+  networkCIDR: 172.20.0.0/16
+  networking:
+    kubenet: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: $REGION
+    type: Public
+    zone: $REGION
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
