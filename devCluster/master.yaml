@@ -7,7 +7,7 @@ metadata:
     kops.k8s.io/cluster: $CLUSTER_NAME
   name: $MASTER_REGION
 spec:
-  machineType: c5n.2xlarge
+  machineType: c5n.xlarge
   maxPrice: "0.30"
   maxSize: 1
   minSize: 1
