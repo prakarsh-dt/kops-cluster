@@ -16,6 +16,14 @@ def banner(heading):
     print("-"*25)
 
 
+banner("Downloading files..")
+os.system("sleep 2")
+sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/cluster.yaml")
+sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/master.yaml")
+sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/worker.yaml")
+print("\nDownloading Completed!\n")
+os.system("sleep 2")
+
 chars = string.ascii_lowercase
 definedText =  'test.' + ''.join(random.choice(chars) for i in range(5)) + '.'
 
@@ -32,6 +40,9 @@ stateStore = "s3://{}".format(stateStore)
 print("Your Entered bucket is :", stateStore)
 os.system("sleep 1")
 os.environ['KOPS_STATE_STORE'] = stateStore
+
+os.system("cp cluster.yaml cluster.yaml.tmp && sed 's/---//g' cluster.yaml.tmp > cluster.yaml && rm cluster.yaml.tmp")
+os.system("cp master.yaml master.yaml.tmp && sed 's/---//g' master.yaml.tmp > master.yaml && rm master.yaml.tmp")
 
 # # # Cluster Config
 with open('cluster.yaml', 'r') as f:
@@ -112,7 +123,7 @@ for i in op:
 banner("Creating Cluster...")
 os.system("sleep 2")
 
-os.system("kops create cluster -f cluster-config.yaml")
+os.system("kops create -f cluster-config.yaml")
 print("{} has been Registered".format(clusterName))
 os.system("sleep 2")
 
