@@ -12,3 +12,8 @@ python3 cluster-create.py
 
 **Step-3:** Now copy the command given after the script is executed
 
+### To Delete a Cluster
+Execute the following command to delete the cluster
+```bash
+kops delete cluster Cluster_Name --yes
+```
