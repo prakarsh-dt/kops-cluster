@@ -15,16 +15,15 @@ def banner(heading):
     print(heading)
     print("-"*25)
 
-
-banner("Downloading files..")
+banner("Downloading Config Files..")
 os.system("sleep 2")
 sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/cluster.yaml")
 sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/master.yaml")
 sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/worker.yaml")
-print("\nDownloading Completed!\n")
+print("\nFiles has been Downloaded!\n")
 os.system("sleep 2")
 
-banner("Recommendations...")
+banner("Suggestions..")
 print("* Domain of the cluster should be devtron.info e.g, abhinav.devtron.info")
 print("* Region where cluster will be created i.e, us-east-1a")
 print("* Bucket name to store cluster configs i.e, abhi-test-logs-us-east-1\n")
@@ -42,7 +41,7 @@ region = input("Enter the Region for Cluster : ")
 stateStore = input("Enter the bucket name to store Cluster Configs :")
 stateStore = "s3://{}".format(stateStore)
 
-print("Your Entered bucket is :", stateStore)
+print("Your entered bucket is :", stateStore)
 os.system("sleep 1")
 os.environ['KOPS_STATE_STORE'] = stateStore
 
@@ -83,7 +82,7 @@ dataWorker['spec']['subnets'][0] = region
 with open('worker.yaml', 'w') as f:
     yaml.dump(dataWorker, f)
 
-banner("Generating Cluster-Config File")
+banner("Generating Cluster-Config File..")
 
 # Creating Cluster Config File 
 if sp.getoutput("cat cluster.yaml | tail -n 1") == "---":
@@ -125,38 +124,52 @@ for i in op:
 
 # print("cluster-config.yaml\n".encode("utf-8"))
 
-banner("Creating Cluster...")
+banner("Creating Cluster..")
 os.system("sleep 2")
 
 os.system("kops create -f cluster-config.yaml")
-print("{} has been Registered".format(clusterName))
+# print("{} has been Registered".format(clusterName))
 os.system("sleep 2")
 
 
-print("\nApplying the cluster changes\n")
+banner("Applying the Cluster Changes..")
 os.system("sleep 2")
 os.system("kops update cluster {} --yes".format(clusterName))
 
 os.system("kops export kubeconfig --admin=18000h --name {}".format(clusterName))
 
 banner("Validating Cluster..")
-os.system("sleep 3")
-os.system("kops validate cluster --wait 4m")
+os.system("sleep 2")
+os.system("touch temp.txt")
 
-nodeName = sp.getoutput("kubectl get node | awk  '{print $1}' | grep -v NAME")
-banner("Checking Taints")
+while sp.getoutput("cat temp.txt") == "":
+    value = sp.getoutput("kops validate cluster | grep ip | awk '{print $1}' > temp.txt")
+    # print("\nThe Node is Not Ready Yet...\n")
+    os.system("kops validate cluster")
+    os.system("sleep 20")
+    if sp.getoutput("cat temp.txt") != "":
+        print("\n\nFound the Node Name : ", end="")
+        os.system("cat temp.txt")
+    else:
+        continue
+
+# banner("Extracting the Node Name")
+os.system("sleep 2")
+nodeName = sp.getoutput("cat temp.txt")
+# print("Extracted Node Name is : ",nodeName)
+
+banner("Checking Taints..")
+os.system("sleep 2")
 os.system("kubectl describe node {} | grep Taints".format(nodeName))
 
 banner("Removing Taints")
 os.system("sleep 2")
 os.system("kubectl taint node {} node-role.kubernetes.io/master:NoSchedule-".format(nodeName))
 
-#banner("Removing Created Files..")
-#os.system("sleep 2")
-
 banner("Please Execute the Following Command")
 os.system("sleep 3")
 print("* export KOPS_STATE_STORE={}".format(stateStore))
 
-os.system("rm cluster-config.yaml cluster.yaml master.yaml worker.yaml")
+# Removing Downloaded Resources
+os.system("rm cluster-config.yaml cluster.yaml master.yaml worker.yaml temp.txt")
 
