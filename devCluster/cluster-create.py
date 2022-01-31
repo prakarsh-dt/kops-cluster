@@ -127,9 +127,31 @@ os.system("kops create -f cluster-config.yaml")
 print("{} has been Registered".format(clusterName))
 os.system("sleep 2")
 
-os.system("kops export kubeconfig --admin=18000h --name {}".format(clusterName))
 
-print("Applying the cluster changes")
+print("\nApplying the cluster changes\n")
 os.system("sleep 2")
 os.system("kops update cluster {} --yes".format(clusterName))
+
+os.system("kops export kubeconfig --admin=18000h --name {}".format(clusterName))
+
+banner("Validating Cluster..")
+os.system("sleep 3")
+os.system("kops validate cluster --wait 4m")
+
+nodeName = sp.getoutput("kubectl get node | awk  '{print $1}' | grep -v NAME")
+banner("Checking Taints")
+os.system("kubectl describe node {} | grep Taints".format(nodeName))
+
+banner("Removing Taints")
+os.system("sleep 2")
+os.system("kubectl taint node {} node-role.kubernetes.io/master:NoSchedule-".format(nodeName))
+
+#banner("Removing Created Files..")
+#os.system("sleep 2")
+
+banner("Please Execute the Following Command")
+os.system("sleep 3")
+print("* export KOPS_STATE_STORE={}".format(stateStore))
+
+os.system("rm cluster-config.yaml cluster.yaml master.yaml worker.yaml")
 
