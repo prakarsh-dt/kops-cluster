@@ -24,6 +24,11 @@ sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev
 print("\nDownloading Completed!\n")
 os.system("sleep 2")
 
+banner("Recommendations...")
+print("* Domain of the cluster should be devtron.info e.g, abhinav.devtron.info")
+print("* Region where cluster will be created i.e, us-east-1a")
+print("* Bucket name to store cluster configs i.e, abhi-test-logs-us-east-1\n")
+
 chars = string.ascii_lowercase
 definedText =  'test.' + ''.join(random.choice(chars) for i in range(5)) + '.'
 
@@ -44,7 +49,7 @@ os.environ['KOPS_STATE_STORE'] = stateStore
 os.system("cp cluster.yaml cluster.yaml.tmp && sed 's/---//g' cluster.yaml.tmp > cluster.yaml && rm cluster.yaml.tmp")
 os.system("cp master.yaml master.yaml.tmp && sed 's/---//g' master.yaml.tmp > master.yaml && rm master.yaml.tmp")
 
-# # # Cluster Config
+# Cluster Config
 with open('cluster.yaml', 'r') as f:
     dataCluster = yaml.safe_load(f)
 
@@ -57,7 +62,7 @@ dataCluster['spec']['subnets'][0]['zone'] = region
 with open('cluster.yaml', 'w') as f:
     yaml.dump(dataCluster, f)
 
-# # # Master Node
+# Master Node
 with open('master.yaml', 'r') as f:
     dataMaster = yaml.safe_load(f)
 
@@ -69,7 +74,7 @@ dataMaster['spec']['subnets'][0] = region
 with open('master.yaml', 'w') as f:
     yaml.dump(dataMaster, f)
 
-# # # Worker Node
+# Worker Node
 with open('worker.yaml', 'r') as f:
     dataWorker = yaml.safe_load(f)
 
