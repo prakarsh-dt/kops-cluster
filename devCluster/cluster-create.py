@@ -17,9 +17,9 @@ def banner(heading):
 
 banner("Downloading Config Files..")
 os.system("sleep 2")
-sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/cluster.yaml")
-sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/master.yaml")
-sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/worker.yaml")
+sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/cluster.yaml")
+sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/master.yaml")
+sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/worker.yaml")
 print("\nFiles has been Downloaded!\n")
 os.system("sleep 2")
 

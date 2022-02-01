@@ -2,7 +2,7 @@
 
 **Step-1:** Download the script
 ```bash
-wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/dev-cluster-config/devCluster/cluster-create.py
+wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/cluster-create.py
 ```
 
 **Step-2:** Execute the script
