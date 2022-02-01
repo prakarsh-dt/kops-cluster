@@ -1,0 +1,20 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: "2021-02-08T06:30:07Z"
+  generation: 2
+  labels:
+    kops.k8s.io/cluster: $CLUSTER_NAME
+  name: $MASTER_REGION
+spec:
+  machineType: c5n.xlarge
+  maxPrice: "0.30"
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: $MASTER_REGION
+  role: Master
+  rootVolumeSize: 20
+  rootVolumeType: gp2
+  subnets:
+  - $REGION
