@@ -9,40 +9,52 @@ import random
 import string
 import subprocess as sp
 import os
+import argparse
 
 def banner(heading):
     print("-"*25)
     print(heading)
     print("-"*25)
 
-banner("Downloading Config Files..")
-os.system("sleep 2")
-sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/cluster.yaml")
-sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/master.yaml")
-sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/worker.yaml")
-print("\nFiles has been Downloaded!\n")
-os.system("sleep 2")
+def getFiles():
+    banner("Downloading Config Files..")
+    os.system("sleep 2")
+    sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/cluster.yaml")
+    sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/master.yaml")
+    sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/worker.yaml")
+    print("\nFiles has been Downloaded!\n")
+    os.system("sleep 2")
 
-banner("Suggestions..")
-print("* Domain of the cluster should be devtron.info e.g, abhinav.devtron.info")
-print("* Region where cluster will be created i.e, us-east-1a")
-print("* Bucket name to store cluster configs i.e, abhi-test-logs-us-east-1\n")
+parser = argparse.ArgumentParser(prog='python3 cluster-create.py', usage='%(prog)s [options]', 
+                                description="A Script Written in Python to Create Single Node Kops Cluster")
+
+parser.add_argument("-c", "--cluster", required=True, help="name of your cluster i.e, xyz.devtron.info", metavar="")
+parser.add_argument("-r", "--region", required=True, help="region to create your cluster i.e, us-east-1a", metavar="")
+parser.add_argument("-b", "--bucket", required=True, help="bucket name to store kops configs i.e, kops-devcluster-singlenode", metavar="")
+
+args = parser.parse_args()
 
 chars = string.ascii_lowercase
+global definedText
 definedText =  'test.' + ''.join(random.choice(chars) for i in range(5)) + '.'
 
-banner("Give Your Desired Values")
+global clusterName
+clusterName = definedText + args.cluster
+# print(clusterName)
 
-domianName  = input("Enter Your Cluster Domain : ")
-clusterName = definedText + domianName
+global region
+region = args.region
+# print(region)
 
-region = input("Enter the Region for Cluster : ")
-
-stateStore = input("Enter the bucket name to store Cluster Configs :")
+global stateStore
+stateStore = args.bucket
 stateStore = "s3://{}".format(stateStore)
+# print(stateStore)
+print("Received values are - \nCluster Name - {}\nRegion - {}\nBucket Name - {}\n".format(clusterName, region, stateStore))
+os.system("sleep 3")
 
-print("Your entered bucket is :", stateStore)
-os.system("sleep 1")
+getFiles()
+
 os.environ['KOPS_STATE_STORE'] = stateStore
 
 os.system("cp cluster.yaml cluster.yaml.tmp && sed 's/---//g' cluster.yaml.tmp > cluster.yaml && rm cluster.yaml.tmp")
@@ -84,26 +96,8 @@ with open('worker.yaml', 'w') as f:
 
 banner("Generating Cluster-Config File..")
 
-# Creating Cluster Config File 
-if sp.getoutput("cat cluster.yaml | tail -n 1") == "---":
-    print("cluster.yaml file configured for merging")
-else:
-    sp.getoutput('echo "\n---" >> cluster.yaml')
-
-if sp.getoutput("cat master.yaml | tail -n 1") == "---":
-    print("master.yaml file configured for merging")
-else:
-    sp.getoutput('echo "\n---" >> master.yaml')
-
-
-# files = sp.getoutput("ls -1 *.yaml | awk '{print $1}'")
-# files = list(files)
-
 op = sp.Popen(["/bin/bash", "-c", "ls -q *.yaml"], stdout=sp.PIPE)
 op = op.stdout.readlines()
-
-# print(len(op))
-# print(op)
 
 for i in op:
     # i = i.decode("utf-8")
@@ -117,7 +111,7 @@ for i in op:
         break
     elif i != "cluster-config.yaml\n".encode("utf-8"):
         # print("File Not Found")
-        print("\nCreating new Config File\n")
+        print("\nCreating New Config File\n")
         os.system("sleep 2")
         os.system("cat cluster.yaml master.yaml worker.yaml >> cluster-config.yaml")
         break
