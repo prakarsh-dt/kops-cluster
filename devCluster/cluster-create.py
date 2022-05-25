@@ -210,7 +210,7 @@ if args.devtron != False:
     os.system("kubectl apply -f devtron-ucid.yaml -ndevtroncd")
     os.system("rm devtron-ucid.yaml")
 
-
+print("\n\n")
 banner("Please Execute the Following Command")
 os.system("sleep 3")
-print("\n* export KOPS_STATE_STORE={}".format(stateStore))
+print("* export KOPS_STATE_STORE={}".format(stateStore))
