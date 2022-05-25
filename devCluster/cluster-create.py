@@ -183,7 +183,7 @@ os.system("rm cluster-config.yaml cluster.yaml master.yaml worker.yaml temp.txt"
 
 if args.devtron != False:
     banner("Installing Devtron")
-    sp.getoutput("wget https://raw.githubusercontent.com/Abhinav-26/kops-cluster/main/devCluster/devtron-ucid.yaml")
+    sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/devtron-ucid.yaml")
     os.system("helm repo add devtron https://helm.devtron.ai && helm repo update")
     sp.getoutput("helm install devtron devtron/devtron-operator --create-namespace --namespace devtroncd --set installer.modules={cicd}")
     banner("Validating Installation")
