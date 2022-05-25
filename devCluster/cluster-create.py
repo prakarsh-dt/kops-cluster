@@ -165,14 +165,15 @@ while sp.getoutput("cat temp.txt") == "":
     else:
         continue
 
-banner("Extracting the Node Name")
 os.system("sleep 2")
 nodeName = sp.getoutput("cat temp.txt")
 
+print("\n")
 banner("Checking Taints..")
 os.system("sleep 2")
 os.system("kubectl describe node {} | grep Taints".format(nodeName))
 
+print("\n")
 banner("Removing Taints")
 os.system("sleep 2")
 os.system("kubectl taint node {} node-role.kubernetes.io/master:NoSchedule-".format(nodeName))
@@ -182,10 +183,12 @@ os.system("rm cluster-config.yaml cluster.yaml master.yaml worker.yaml temp.txt"
 
 
 if args.devtron != False:
+    print("\n\n")
     banner("Installing Devtron")
     sp.getoutput("wget https://raw.githubusercontent.com/prakarsh-dt/kops-cluster/main/devCluster/devtron-ucid.yaml")
     os.system("helm repo add devtron https://helm.devtron.ai && helm repo update")
     sp.getoutput("helm install devtron devtron/devtron-operator --create-namespace --namespace devtroncd --set installer.modules={cicd}")
+    print("\n")
     banner("Validating Installation")
     os.system("sleep 2")
     os.system("touch status.txt")
@@ -204,8 +207,10 @@ if args.devtron != False:
     print("\nCongratulations! Devtron has been installed Successfully.\n")
     os.system("helm status devtron -ndevtroncd")
     os.system("rm status.txt && sleep 2")
+    print("\n")
     banner("Changing LB to NodePort")
     os.system("kubectl patch -n devtroncd svc devtron-service -p \'{\"spec\": {\"ports\": [{\"port\": 80,\"targetPort\": \"devtron\",\"protocol\": \"TCP\",\"name\": \"devtron\",\"nodePort\": 32080}],\"type\": \"NodePort\",\"selector\": {\"app\": \"devtron\"}}}\'")
+    print("\n")
     banner("Applying ucid")
     os.system("kubectl apply -f devtron-ucid.yaml -ndevtroncd")
     os.system("rm devtron-ucid.yaml")
