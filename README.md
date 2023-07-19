@@ -1,4 +1,4 @@
-# Commands to create a Test KOPS Cluster
+# Commands to create a Test KOPs Cluster
 
 ## Prerequisites
 1. Ensure that the machine you are running the kops commands on has proper AWS access to be able to create the cluster.
